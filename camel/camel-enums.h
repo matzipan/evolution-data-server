@@ -50,7 +50,7 @@ typedef enum { /*< flags >*/
 	CAMEL_FOLDER_FILTER_JUNK = 1 << 6
 } CamelFolderFlags;
 
-#define CAMEL_FOLDER_TYPE_BIT (10)
+#define CAMEL_FOLDER_TYPE_BIT (19)
 
 /**
  * CamelFolderInfoFlags:
@@ -77,6 +77,8 @@ typedef enum { /*< flags >*/
  *    A folder being shared by someone else.
  * @CAMEL_FOLDER_SHARED_BY_ME:
  *    A folder being shared by the user.
+ * @CAMEL_FOLDER_READONLY:
+ *    The folder is read only.
  * @CAMEL_FOLDER_TYPE_NORMAL:
  *    The folder is a normal folder.
  * @CAMEL_FOLDER_TYPE_INBOX:
@@ -97,6 +99,14 @@ typedef enum { /*< flags >*/
  *    The folder contains memos, instead of mail messages.
  * @CAMEL_FOLDER_TYPE_TASKS:
  *    The folder contains tasks, instead of mail messages.
+ * @CAMEL_FOLDER_FLAGGED:
+ *    This folder contains flagged messages. Some clients call this "starred. Used by RFC 6154.
+ * @CAMEL_FOLDER_TYPE_ALL
+ *    This folder contains all the messages. Used by RFC 6154.
+ * @CAMEL_FOLDER_TYPE_ARCHIVE
+ *    This folder contains archived messages. Used by RFC 6154.
+ * @CAMEL_FOLDER_TYPE_DRAFTS
+ *    This folder contains drafts. Used by RFC 6154.
  *
  * These flags are abstractions.  It's up to the CamelProvider to give
  * them suitable interpretations.  Use #CAMEL_FOLDER_TYPE_MASK to isolate
@@ -115,6 +125,11 @@ typedef enum { /*< flags >*/
 	CAMEL_FOLDER_VTRASH = 1 << 7,
 	CAMEL_FOLDER_SHARED_TO_ME = 1 << 8,
 	CAMEL_FOLDER_SHARED_BY_ME = 1 << 9,
+
+	CAMEL_FOLDER_READONLY = 1 << 16,
+	CAMEL_FOLDER_WRITEONLY = 1 << 17,
+	CAMEL_FOLDER_FLAGGED = 1 << 18,
+
 	CAMEL_FOLDER_TYPE_NORMAL = 0 << CAMEL_FOLDER_TYPE_BIT,
 	CAMEL_FOLDER_TYPE_INBOX = 1 << CAMEL_FOLDER_TYPE_BIT,
 	CAMEL_FOLDER_TYPE_OUTBOX = 2 << CAMEL_FOLDER_TYPE_BIT,
@@ -125,14 +140,17 @@ typedef enum { /*< flags >*/
 	CAMEL_FOLDER_TYPE_EVENTS = 7 << CAMEL_FOLDER_TYPE_BIT,
 	CAMEL_FOLDER_TYPE_MEMOS = 8 << CAMEL_FOLDER_TYPE_BIT,
 	CAMEL_FOLDER_TYPE_TASKS = 9 << CAMEL_FOLDER_TYPE_BIT,
-	CAMEL_FOLDER_READONLY = 1 << 16,
-	/* empty gap from unused flag removal */
-	CAMEL_FOLDER_FLAGGED = 1 << 18,
+	CAMEL_FOLDER_TYPE_ALL = 10 << CAMEL_FOLDER_TYPE_BIT,
+	CAMEL_FOLDER_TYPE_ARCHIVE = 11 << CAMEL_FOLDER_TYPE_BIT,
+	CAMEL_FOLDER_TYPE_DRAFTS = 12 << CAMEL_FOLDER_TYPE_BIT,
 
 	CAMEL_FOLDER_FLAGS_LAST    = 1 << 24  /*< skip >*/
 } CamelFolderInfoFlags;
 
-#define CAMEL_FOLDER_TYPE_MASK (63 << CAMEL_FOLDER_TYPE_BIT)
+#define CAMEL_FOLDER_TYPE_MASK (0xF << CAMEL_FOLDER_TYPE_BIT)
+
+#define CAMEL_STORE_INFO_FOLDER_TYPE_BIT (19)
+
 
 /* Note: The HTML elements are escaped in the doc comment intentionally,
  *       to have them shown as expected in generated documentation. */
@@ -192,12 +210,29 @@ typedef enum { /*< flags >*/
 	CAMEL_STORE_INFO_FOLDER_VTRASH = 1 << 7,
 	CAMEL_STORE_INFO_FOLDER_SHARED_TO_ME = 1 << 8,
 	CAMEL_STORE_INFO_FOLDER_SHARED_BY_ME = 1 << 9,
+
 	CAMEL_STORE_INFO_FOLDER_READONLY = 1 << 16,
-	/* empty gap from unused flag removal */
+	CAMEL_STORE_INFO_FOLDER_WRITEONLY = 1 << 17,
 	CAMEL_STORE_INFO_FOLDER_FLAGGED = 1 << 18,
+
+	CAMEL_STORE_INFO_FOLDER_TYPE_NORMAL = 0 << CAMEL_STORE_INFO_FOLDER_TYPE_BIT,
+	CAMEL_STORE_INFO_FOLDER_TYPE_INBOX = 1 << CAMEL_STORE_INFO_FOLDER_TYPE_BIT,
+	CAMEL_STORE_INFO_FOLDER_TYPE_OUTBOX = 2 << CAMEL_STORE_INFO_FOLDER_TYPE_BIT,
+	CAMEL_STORE_INFO_FOLDER_TYPE_TRASH = 3 << CAMEL_STORE_INFO_FOLDER_TYPE_BIT,
+	CAMEL_STORE_INFO_FOLDER_TYPE_JUNK = 4 << CAMEL_STORE_INFO_FOLDER_TYPE_BIT,
+	CAMEL_STORE_INFO_FOLDER_TYPE_SENT = 5 << CAMEL_STORE_INFO_FOLDER_TYPE_BIT,
+	CAMEL_STORE_INFO_FOLDER_TYPE_CONTACTS = 6 << CAMEL_STORE_INFO_FOLDER_TYPE_BIT,
+	CAMEL_STORE_INFO_FOLDER_TYPE_EVENTS = 7 << CAMEL_STORE_INFO_FOLDER_TYPE_BIT,
+	CAMEL_STORE_INFO_FOLDER_TYPE_MEMOS = 8 << CAMEL_STORE_INFO_FOLDER_TYPE_BIT,
+	CAMEL_STORE_INFO_FOLDER_TYPE_TASKS = 9 << CAMEL_STORE_INFO_FOLDER_TYPE_BIT,
+	CAMEL_STORE_INFO_FOLDER_TYPE_ALL = 10 << CAMEL_STORE_INFO_FOLDER_TYPE_BIT,
+	CAMEL_STORE_INFO_FOLDER_TYPE_ARCHIVE = 11 << CAMEL_STORE_INFO_FOLDER_TYPE_BIT,
+	CAMEL_STORE_INFO_FOLDER_TYPE_DRAFTS = 12 << CAMEL_STORE_INFO_FOLDER_TYPE_BIT,
 
 	CAMEL_STORE_INFO_FOLDER_LAST          = 1 << 24  /*< skip >*/
 } CamelStoreInfoFlags;
+
+#define CAMEL_STORE_INFO_FOLDER_TYPE_MASK  (0xF << CAMEL_STORE_INFO_FOLDER_TYPE_BIT)
 
 /**
  * CamelFetchHeadersType:
