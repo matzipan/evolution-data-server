@@ -49,22 +49,20 @@ typedef struct _CamelFolderThread {
 } CamelFolderThread;
 
 /* interface 1: using uid's */
-CamelFolderThread *camel_folder_thread_messages_new (CamelFolder *folder, GPtrArray *uids, gboolean thread_subject);
-void camel_folder_thread_messages_apply (CamelFolderThread *thread, GPtrArray *uids);
+CamelFolderThread *camel_folder_thread_new (CamelFolder *folder, GPtrArray *uids, gboolean thread_subject);
+void camel_folder_thread_apply (CamelFolderThread *thread, GPtrArray *uids);
 
-/* interface 2: using messageinfo's.  Currently disabled. */
-#if 0
+/* interface 2: using messageinfo's. */
 /* new improved interface */
-CamelFolderThread *camel_folder_thread_messages_new_summary (GPtrArray *summary);
-void camel_folder_thread_messages_add (CamelFolderThread *thread, GPtrArray *summary);
-void camel_folder_thread_messages_remove (CamelFolderThread *thread, GPtrArray *uids);
-#endif
+CamelFolderThread *camel_folder_thread_new_summary (GPtrArray *summary);
+void camel_folder_thread_add (CamelFolderThread *thread, GPtrArray *summary);
+void camel_folder_thread_remove (CamelFolderThread *thread, GPtrArray *uids);
 
-void camel_folder_thread_messages_ref (CamelFolderThread *thread);
-void camel_folder_thread_messages_unref (CamelFolderThread *thread);
+void camel_folder_thread_ref (CamelFolderThread *thread);
+void camel_folder_thread_unref (CamelFolderThread *thread);
 
 /* debugging function only */
-gint camel_folder_threaded_messages_dump (CamelFolderThreadNode *c);
+gint camel_folder_thread_dump (CamelFolderThreadNode *c);
 
 G_END_DECLS
 

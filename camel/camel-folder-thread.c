@@ -392,7 +392,7 @@ dump_tree_rec (struct _tree_info *info,
 }
 
 gint
-camel_folder_threaded_messages_dump (CamelFolderThreadNode *c)
+camel_folder_thread_dump (CamelFolderThreadNode *c)
 {
 	gint count;
 	struct _tree_info info;
@@ -634,7 +634,7 @@ thread_summary (CamelFolderThread *thread,
 }
 
 /**
- * camel_folder_thread_messages_new:
+ * camel_folder_thread_new:
  * @folder:
  * @uids: (element-type utf8): The subset of uid's to thread.  If NULL. then thread all
  * uid's in @folder.
@@ -653,7 +653,7 @@ thread_summary (CamelFolderThread *thread,
  * which represent the threaded structure of the messages.
  **/
 CamelFolderThread *
-camel_folder_thread_messages_new (CamelFolder *folder,
+camel_folder_thread_new (CamelFolder *folder,
                                   GPtrArray *uids,
                                   gboolean thread_subject)
 {
@@ -725,11 +725,11 @@ add_present_rec (CamelFolderThread *thread,
 }
 
 /**
- * camel_folder_thread_messages_apply:
+ * camel_folder_thread_apply:
  * @uids:(element-type utf8) (transfer none):
  **/
 void
-camel_folder_thread_messages_apply (CamelFolderThread *thread,
+camel_folder_thread_apply (CamelFolderThread *thread,
                                     GPtrArray *uids)
 {
 	gint i;
@@ -761,19 +761,19 @@ camel_folder_thread_messages_apply (CamelFolderThread *thread,
 }
 
 void
-camel_folder_thread_messages_ref (CamelFolderThread *thread)
+camel_folder_thread_ref (CamelFolderThread *thread)
 {
 	thread->refcount++;
 }
 
 /**
- * camel_folder_thread_messages_unref:
+ * camel_folder_thread_unref:
  * @thread:
  *
  * Free all memory associated with the thread descriptor @thread.
  **/
 void
-camel_folder_thread_messages_unref (CamelFolderThread *thread)
+camel_folder_thread_unref (CamelFolderThread *thread)
 {
 	if (thread->refcount > 1) {
 		thread->refcount--;
@@ -792,9 +792,8 @@ camel_folder_thread_messages_unref (CamelFolderThread *thread)
 	g_free (thread);
 }
 
-#if 0
 /**
- * camel_folder_thread_messages_new_summary:
+ * camel_folder_thread_new_summary:
  * @summary: Array of CamelMessageInfo's to thread.
  *
  * Thread a list of MessageInfo's.  The summary must remain valid for the
@@ -805,7 +804,7 @@ camel_folder_thread_messages_unref (CamelFolderThread *thread)
  * which represent the threaded structure of the messages.
  **/
 CamelFolderThread *
-camel_folder_thread_messages_new_summary (GPtrArray *summary)
+camel_folder_thread_new_summary (GPtrArray *summary)
 {
 	CamelFolderThread *thread;
 
@@ -845,7 +844,7 @@ build_summary_rec (GHashTable *have,
 }
 
 void
-camel_folder_thread_messages_add (CamelFolderThread *thread,
+camel_folder_thread_add (CamelFolderThread *thread,
                                   GPtrArray *summary)
 {
 	GPtrArray *all;
@@ -882,7 +881,7 @@ remove_uid_node_rec (CamelFolderThread *thread,
                      CamelFolderThreadNode *parent)
 {
 	CamelFolderThreadNode *prev = NULL;
-	CamelFolderThreadNode *node, *next, *child, *rest;
+	CamelFolderThreadNode *node, *next, *child, *rest, *lchild;
 
 	node = (CamelFolderThreadNode *) list;
 	next = node->next;
@@ -939,7 +938,7 @@ remove_uid_node_rec (CamelFolderThread *thread,
 }
 
 void
-camel_folder_thread_messages_remove (CamelFolderThread *thread,
+camel_folder_thread_remove (CamelFolderThread *thread,
                                      GPtrArray *uids)
 {
 	GHashTable *table;
@@ -952,5 +951,3 @@ camel_folder_thread_messages_remove (CamelFolderThread *thread,
 	remove_uid_node_rec (thread, table, &thread->tree, NULL);
 	g_hash_table_destroy (table);
 }
-
-#endif

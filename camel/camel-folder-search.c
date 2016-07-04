@@ -1049,7 +1049,7 @@ folder_search_match_threads (CamelSExp *sexp,
 
 	/* cache this, so we only have to re-calculate once per search at most */
 	if (p->threads == NULL) {
-		p->threads = camel_folder_thread_messages_new (search->folder, NULL, TRUE);
+		p->threads = camel_folder_thread_new (search->folder, NULL, TRUE);
 		p->threads_hash = g_hash_table_new (g_str_hash, g_str_equal);
 
 		fill_thread_table (p->threads->tree, p->threads_hash);
@@ -1061,7 +1061,7 @@ folder_search_match_threads (CamelSExp *sexp,
 
 		if (type != 4)
 			g_hash_table_insert (results, g_ptr_array_index (r->value.ptrarray, i), GINT_TO_POINTER (1));
-
+			
 		node = g_hash_table_lookup (p->threads_hash, (gchar *) g_ptr_array_index (r->value.ptrarray, i));
 		if (node == NULL) /* this shouldn't happen but why cry over spilt milk */
 			continue;
@@ -2033,7 +2033,7 @@ camel_folder_search_count (CamelFolderSearch *search,
 fail:
 	/* these might be allocated by match-threads */
 	if (p->threads)
-		camel_folder_thread_messages_unref (p->threads);
+		camel_folder_thread_unref (p->threads);
 	if (p->threads_hash)
 		g_hash_table_destroy (p->threads_hash);
 	if (search->summary_set)
@@ -2208,7 +2208,7 @@ camel_folder_search_search (CamelFolderSearch *search,
 fail:
 	/* these might be allocated by match-threads */
 	if (p->threads)
-		camel_folder_thread_messages_unref (p->threads);
+		camel_folder_thread_unref (p->threads);
 	if (p->threads_hash)
 		g_hash_table_destroy (p->threads_hash);
 	if (search->summary_set)
